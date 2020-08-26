@@ -115,7 +115,8 @@ const InstallationUtils = {
 
   async cleaupPath(installPath) {
     const noop = () => {}
-    await rimraf(installPath, noop)
+    // This will clears the package that is built
+    // await rimraf(installPath, noop)
   },
 }
 

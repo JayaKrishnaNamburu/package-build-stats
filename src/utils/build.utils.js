@@ -38,7 +38,7 @@ const BuildUtils = {
         console.log(${options.customImports.join(', ')})
         `
       } else {
-        importStatement = `const p = require('${packageName}'); console.log(p)`
+        importStatement = `const package = require('${packageName}'); \n module.exports = package`
       }
     }
 
@@ -118,8 +118,19 @@ const BuildUtils = {
     const { stats, err, memoryFileSystem } = await BuildUtils.compilePackage({
       entry,
       externals,
-      debug: options.debug
+      debug: options.debug,
     })
+
+    const entryPath = path.join(installPath, 'bundle.js')
+
+    // Saving the bundle
+    fs.writeFileSync(
+      entryPath,
+      memoryFileSystem.readFileSync(
+        path.join(process.cwd(), 'dist', 'bundle.js')
+      ),
+      'utf-8'
+    )
 
     log('build end %s', name)
 
